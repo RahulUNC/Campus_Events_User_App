@@ -11,13 +11,34 @@ class organizationBuilder extends StatelessWidget {
       registeredOrganizations.add(new organization('TBD', false, 'the descritption is yet TBD'));
     }    
     return Container (
-        child: ListView.builder(
-            itemCount: registeredOrganizations.length,
-            itemBuilder: (BuildContext ctxt, int index){
-            return organizationUIComponenet(index);
-            },
-          ),
-      );
+      child: Center(
+        child: ListView(
+          children: <Widget>[
+            Container(
+              alignment: Alignment(0, 0),
+              height: MediaQuery.of(context).size.height*0.2,
+              child:Text(
+                'My Organizations',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 50.0,
+                  color: Colors.red,
+                ),
+              ),
+            ), 
+            Container(
+              height: MediaQuery.of(context).size.height*0.6,
+              child: ListView.builder(
+                itemCount: registeredOrganizations.length,
+                itemBuilder: (BuildContext ctxt, int index){
+                return organizationUIComponenet(index);
+                },
+              )
+            )
+          ],
+        ),
+      ),        
+    );
   }
 }
 
@@ -38,17 +59,29 @@ class organizationUIComponenet extends StatelessWidget {
   int currentIndex;
   organizationUIComponenet(this.currentIndex);  
   Widget build(BuildContext context) {
-    return ListTile(
-        onTap: () {
-          Navigator.push(context,
-          MaterialPageRoute(
-            builder: (context) => organizationInfo(registeredOrganizations[currentIndex]),
-          )
-          );
-        },
-        leading: Icon(Icons.question_answer),  //replace with organization logo
-        title: Text(registeredOrganizations[currentIndex].getName()),
-        trailing: getLeadingIcon(registeredOrganizations[currentIndex].getfavorite()),
+      return Card(
+        margin: EdgeInsets.all(10),
+        child: Column(
+          children: <Widget>[
+            addLogo(),
+            Divider(
+              color: Colors.red,
+            ),
+            ListTile(
+              onTap: () {
+                Navigator.push(context,
+                MaterialPageRoute(
+                  builder: (context) => organizationInfo(registeredOrganizations[currentIndex]),
+                )
+                );
+              },
+              leading: Icon(Icons.person),  //replace with organization logo
+              title: Text(registeredOrganizations[currentIndex].getName()),
+              subtitle: Text(registeredOrganizations[currentIndex].getDescription()),
+              trailing: getLeadingIcon(registeredOrganizations[currentIndex].getfavorite()),
+            )
+          ],
+        ),
       );
     }
   }
@@ -59,3 +92,13 @@ class organizationUIComponenet extends StatelessWidget {
     else
       return Icon(Icons.thumb_down);
   }
+
+//replace with dynamic code  
+class addLogo extends StatelessWidget{
+  @override
+  Widget build(BuildContext context) {
+    AssetImage tbdLogo = new AssetImage('assets/logo.png');
+    Image logo = Image(image: tbdLogo);
+    return Container(child: logo,);
+  }
+}

@@ -30,36 +30,52 @@ class informationBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {    
     return Container (
-      child: Center(
-        child:Column(
+      child: ListView(
         children: <Widget>[
-          //Expanded(child:addLogo()),
-          Expanded(child: Text(
-            org.getName(),
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Colors.red,
-              fontSize: 40.0,
-            ),
-          ),),
-          Expanded(child: Text(
-            org.getDescription(),
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 20.0,
-            ),
-          ),),
-          Expanded(child: Row(
-            children: <Widget>[
-              Expanded(child: favoriteButton(),),
-              Expanded(child: messageButton(),),
-            ],
-          ),)
-          
+          Container(
+            child:  Column(children: <Widget>[
+              addLogo(),
+              Container(
+                margin: EdgeInsets.all(5.0),
+                child: Text(
+                  org.getName(),
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 35.0,
+                  ),
+                ),
+              ),
+              Text(org.getDescription()),
+              Row(children: <Widget>[
+                Expanded(
+                  child: messageButton(),
+                ),
+                Expanded(child: favoriteButton(),)
+              ],),
+              Container(
+                margin: EdgeInsets.all(5.0),
+                child: Text(
+                  'Upcoming events for ' + org.getName(),
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 35.0,
+                  ),
+                ),
+              ),
+            ],),
+          ),
+          //Expanded(child:addLogo()),          
+          Container(
+            height: MediaQuery.of(context).size.height*0.4,
+              child: ListView.builder(
+                itemCount: 10,
+                itemBuilder: (BuildContext ctxt, int index){
+                return eventUIComponent();
+                },
+              )
+          ),
         ],
       ),
-      )
     );
   }
 }
@@ -76,7 +92,7 @@ class favoriteButton extends StatelessWidget {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Container(
-      height: MediaQuery.of(context).size.height*0.2,
+      height: MediaQuery.of(context).size.height*0.1,
       margin: EdgeInsets.all(10.0),
       child: RaisedButton(
         onPressed: (){},
@@ -92,7 +108,7 @@ class messageButton extends StatelessWidget {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Container(
-      height: MediaQuery.of(context).size.height*0.2,
+      height: MediaQuery.of(context).size.height*0.1,
       margin: EdgeInsets.all(10.0),
       child: RaisedButton(
         onPressed: (){},
@@ -103,3 +119,33 @@ class messageButton extends StatelessWidget {
     );
   }
 } 
+
+class eventUIComponent extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return  Card(
+        margin: EdgeInsets.all(10),
+        child: Column(
+          children: <Widget>[
+            ListTile(
+              leading: Icon(Icons.event),
+              title: Text('Event Name'),
+              subtitle: Text('Description of the event!'),
+            ),
+            Divider(
+              color: Colors.red,
+            ),
+            ListTile(
+              leading: Icon(Icons.gps_fixed),  //replace with organization logo
+              title: Text('UNC Chapel Hill'),
+            ),
+            ListTile(
+              leading: Icon(Icons.access_time),  //replace with organization logo
+              title: Text('2:00 pm'),
+            ),
+          ],
+        ),
+      );
+  }
+}
