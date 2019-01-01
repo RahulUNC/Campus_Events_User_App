@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'organization_info_screen.dart';
 
 List<organization> registeredOrganizations = [];
+
 class organizationBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {    
@@ -71,7 +72,7 @@ class organizationUIComponenet extends StatelessWidget {
               onTap: () {
                 Navigator.push(context,
                 MaterialPageRoute(
-                  builder: (context) => organizationInfo(registeredOrganizations[currentIndex]),
+                  builder: (context) => infoRunner(registeredOrganizations[currentIndex]),
                 )
                 );
               },

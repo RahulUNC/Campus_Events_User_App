@@ -1,12 +1,34 @@
 import 'package:flutter/material.dart';
 import './organization.dart';
-import 'bottom_nav.dart';
 
-class organizationInfo extends StatelessWidget {
-  
+organization org1;
+
+class infoRunner extends StatefulWidget {
+  @override
+
   organization org;
+
+  infoRunner(this.org);
+
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    org1 = org;
+    return organizationInfo();
+  } 
+}
+
+class organizationInfo extends State<infoRunner> {
   
-  organizationInfo(this.org);
+  int selectedPage = 0;
+
+  organizationInfo();
+
+  final pageOptions = [
+    informationBody(org1),
+    organizationBuilder(),
+    Text('test3')
+  ];
+  
 
   @override
   Widget build(BuildContext context) {
@@ -15,8 +37,30 @@ class organizationInfo extends StatelessWidget {
         title: Text('Campus Events'),
         backgroundColor: Colors.red,
         ),
-      body: informationBody(org),
-      bottomNavigationBar: bottomNavBar(),
+      body: pageOptions[selectedPage],
+      bottomNavigationBar: BottomNavigationBar(
+        fixedColor: Colors.red,
+        currentIndex: selectedPage,
+        onTap: (int index) {
+          setState(() {
+            selectedPage = index;
+          });
+        },
+        items: [
+          BottomNavigationBarItem(            
+            icon: Icon(Icons.home),
+            title: Text('Home'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.list),
+            title: Text('Organizations'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            title: Text('Account'),
+          ),
+        ],
+      ),
     );
   }
 }
