@@ -2,15 +2,26 @@ import 'package:flutter/material.dart';
 import './organization.dart';
 import './organization_info_screen.dart';
 
-class allOrganizations extends StatelessWidget {
+var organizations = [
+  new organization('cisco', false, 'cisco does networking'),
+  new organization('sas', false, 'sas does programming'),
+  new organization('fidelity', false, 'fidelity does finances'),
+  new organization('xiamoi', false, 'makes cheap phoens'),
+  new organization('UNC', false, 'spends money in the wrong places')
+];
+
+class allOrganizations extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
     return allOrganizationsHomeBuilder();
   }
 }
 
-class allOrganizationsHomeBuilder extends StatelessWidget {
+class allOrganizationsHomeBuilder extends State<allOrganizations> {
+  final TextEditingController textEditController = new TextEditingController();
+  String searchChange = '';
+  
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -38,7 +49,14 @@ class allOrganizationsHomeBuilder extends StatelessWidget {
                   Expanded(child: Container(
                     margin: EdgeInsets.all(5),
                     width: MediaQuery.of(context).size.width*0.6,
-                    child: TextField(),
+                    child: TextField(
+                      controller: textEditController,
+                      onChanged: (String e) {
+                        setState(() {
+                          searchChange = e;                          
+                        });
+                      },
+                    ),
                   ),),
                   Expanded(child: Container(
                     margin: EdgeInsets.all(5),
@@ -55,9 +73,9 @@ class allOrganizationsHomeBuilder extends StatelessWidget {
             Container(
               height: MediaQuery.of(context).size.height*0.6,
               child: ListView.builder(
-                itemCount: registeredOrganizations.length,
+                itemCount: findSearchOrgs(searchChange).length,
                 itemBuilder: (BuildContext ctxt, int index){
-                return organizationUIComponenet();
+                return organizationUIComponenet(searchChange, index);
                 },
               )
             )
@@ -67,10 +85,31 @@ class allOrganizationsHomeBuilder extends StatelessWidget {
     );
   }
 }
+
+List<organization> findSearchOrgs (String search) {
+  List<organization> searched = [];
+  if(search == '')
+    return organizations;
+  for(int i = 0; i < organizations.length; i++){
+    if(organizations[i].getName().contains(search)) {
+      searched.add(organizations[i]);
+    }
+  }
+  return searched;
+}
+
 class organizationUIComponenet extends StatelessWidget {
+  
+  String search;
+  int currentIndex;
+  List<organization> searchedList;
+  organizationUIComponenet(this.search, this.currentIndex);
+
+  
   @override
   organization temp = new organization('TBD', false, 'description is yet TBD');  
   Widget build(BuildContext context) {
+      searchedList = findSearchOrgs(search);
       return Card(
         margin: EdgeInsets.all(10),
         child: Column(
@@ -83,14 +122,14 @@ class organizationUIComponenet extends StatelessWidget {
               onTap: () {
                 Navigator.push(context,
                 MaterialPageRoute(
-                  builder: (context) => infoRunner(temp),
+                  builder: (context) => infoRunner(searchedList[currentIndex]),
                 )
                 );
               },
               leading: Icon(Icons.person),  //replace with organization logo
-              title: Text(temp.getName()),
-              subtitle: Text(temp.getDescription()),
-              trailing: getLeadingIcon(temp.getfavorite()),
+              title: Text(searchedList[currentIndex].getName()),
+              subtitle: Text(searchedList[currentIndex].getDescription()),
+              trailing: getLeadingIcon(searchedList[currentIndex].getfavorite()),
             )
           ],
         ),
